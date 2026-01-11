@@ -29,7 +29,8 @@
       "Bash(git commit:*)",
       "Bash(vercel link:*)",
       "Bash(vercel:*)",
-      "Bash(pkill:*)"
+      "Bash(pkill:*)",
+      "Bash(npm run dev:*)"
     ]
   }
 }
