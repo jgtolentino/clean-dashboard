@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import './Dashboard.css'
 
 interface DashboardProps {
-  session: Session
+  session: Session | null
 }
 
 interface Profile {
@@ -22,8 +22,19 @@ export default function Dashboard({ session }: DashboardProps) {
   const [saving, setSaving] = useState(false)
 
   useEffect(() => {
-    getProfile()
-  }, [])
+    if (session?.user?.id) {
+      getProfile()
+    } else {
+      // Demo mode - no session
+      setProfile({
+        id: 'demo-user',
+        email: 'demo@suqianalytics.com',
+        full_name: 'Demo User'
+      })
+      setFullName('Demo User')
+      setLoading(false)
+    }
+  }, [session])
 
   const getProfile = async () => {
     try {
@@ -31,7 +42,7 @@ export default function Dashboard({ session }: DashboardProps) {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
-        .eq('id', session.user.id)
+        .eq('id', session!.user.id)
         .single()
 
       if (error && error.code !== 'PGRST116') {
@@ -44,8 +55,8 @@ export default function Dashboard({ session }: DashboardProps) {
       } else {
         // Create profile if doesn't exist
         const newProfile: Profile = {
-          id: session.user.id,
-          email: session.user.email!,
+          id: session!.user.id,
+          email: session!.user.email!,
         }
         setProfile(newProfile)
       }
@@ -58,6 +69,12 @@ export default function Dashboard({ session }: DashboardProps) {
 
   const updateProfile = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!session) {
+      alert('Demo mode - changes not saved')
+      return
+    }
+
     setSaving(true)
 
     try {
@@ -111,7 +128,7 @@ export default function Dashboard({ session }: DashboardProps) {
               <input
                 id="email"
                 type="text"
-                value={session.user.email}
+                value={profile?.email || 'demo@suqianalytics.com'}
                 disabled
                 className="input-disabled"
               />
@@ -137,24 +154,28 @@ export default function Dashboard({ session }: DashboardProps) {
         <div className="stats-grid">
           <div className="stat-card">
             <h3>User ID</h3>
-            <p className="stat-value">{session.user.id.slice(0, 8)}...</p>
+            <p className="stat-value">{session?.user?.id?.slice(0, 8) || 'demo-use'}...</p>
           </div>
           <div className="stat-card">
             <h3>Email Confirmed</h3>
             <p className="stat-value">
-              {session.user.email_confirmed_at ? '✅ Yes' : '❌ No'}
+              {session?.user?.email_confirmed_at ? '✅ Yes' : '✅ Demo'}
             </p>
           </div>
           <div className="stat-card">
             <h3>Last Sign In</h3>
             <p className="stat-value">
-              {new Date(session.user.last_sign_in_at!).toLocaleDateString()}
+              {session?.user?.last_sign_in_at
+                ? new Date(session.user.last_sign_in_at).toLocaleDateString()
+                : new Date().toLocaleDateString()}
             </p>
           </div>
           <div className="stat-card">
             <h3>Created At</h3>
             <p className="stat-value">
-              {new Date(session.user.created_at!).toLocaleDateString()}
+              {session?.user?.created_at
+                ? new Date(session.user.created_at).toLocaleDateString()
+                : '2025-01-01'}
             </p>
           </div>
         </div>

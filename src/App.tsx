@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { supabase } from './lib/supabase'
 import { Session } from '@supabase/supabase-js'
-import Auth from './components/Auth'
 import Dashboard from './components/Dashboard'
 import './App.css'
 
@@ -45,7 +44,7 @@ function App() {
 
   return (
     <div className="app">
-      {!session ? <Auth /> : <Dashboard session={session} />}
+      <Dashboard session={session!} />
     </div>
   )
 }
