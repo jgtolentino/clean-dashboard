@@ -29,4 +29,23 @@ dist-ssr
 .env.production.local
 .env.development.local
 .env.test.local
+
+# Vercel
 .vercel
+.vercel.json
+
+# Build output
+build
+out
+
+# Testing
+coverage
+.nyc_output
+
+# Cache
+.cache
+.eslintcache
+.stylelintcache
+
+# OS
+Thumbs.db

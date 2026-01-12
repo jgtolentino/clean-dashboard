@@ -1,174 +1,126 @@
-# Suqi Analytics - Retail Intelligence Platform
+# Scout Dashboard - Retail Intelligence Platform
 
 TBWA's advanced retail intelligence platform powered by Suqi Analytics. Comprehensive insights into transaction trends, consumer behavior, and market intelligence for data-driven retail strategies.
 
-## 🚀 Features
-
-- 🔐 **Secure Authentication**: Email/password and magic link authentication
-- 📊 **Retail Intelligence**: Transaction trends and consumer behavior analytics
-- 👤 **User Profiles**: Personalized dashboard and profile management
-- 🎨 **Modern UI**: Clean, responsive design with Inter font
-- 🔒 **Row-Level Security**: Secure data access with Supabase RLS
-- ⚡ **Lightning Fast**: Built with Vite for optimal performance
-
-## 🛠️ Tech Stack
-
-- **Frontend**: React 18 + TypeScript + Vite
-- **Backend**: Supabase (PostgreSQL + Auth)
-- **Styling**: CSS with modern design system
-- **Deployment**: Vercel
-- **Database**: PostgreSQL with RLS policies
-
-## 📋 Prerequisites
-
-- Node.js 18+ and npm
-- Supabase account (project: `spdtwktxdalcfigzeqrz`)
-
-## ⚡ Quick Start
-
-### 1. Install Dependencies
+## 🚀 Quick Start
 
 ```bash
+# Install dependencies
 npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-### 2. Environment Setup
+## 📦 Production Deployment
 
-Environment variables are configured in `.env.local`:
+### Vercel Deployment
+
+1. **Connect Repository**
+   ```bash
+   vercel link
+   ```
+
+2. **Set Environment Variables**
+   ```bash
+   vercel env add VITE_SUPABASE_URL
+   vercel env add VITE_SUPABASE_ANON_KEY
+   ```
+
+3. **Deploy**
+   ```bash
+   vercel --prod
+   ```
+
+### Environment Variables
+
+Required environment variables (set in Vercel dashboard or `.env.local`):
 
 ```env
 VITE_SUPABASE_URL=https://spdtwktxdalcfigzeqrz.supabase.co
-VITE_SUPABASE_ANON_KEY=sb_publishable_p7jLR_yMD1wQJE8Go3-Nww_bnOzu-WX
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
 ```
 
-### 3. Database Setup
+## 📋 Production Checklist
 
-Run the migration to create required tables:
+### ✅ Performance
+- [x] Asset caching headers configured (1 year for static assets)
+- [x] DNS prefetch for Supabase
+- [x] Font preloading (Inter)
+- [x] TypeScript type checking in build
+- [x] Vite production optimizations enabled
 
-```bash
-# Option 1: Using Supabase CLI (recommended)
-supabase db push
+### ✅ Security
+- [x] Security headers configured (CSP, X-Frame-Options, etc.)
+- [x] Environment variables properly configured
+- [x] No sensitive data in client bundle
+- [x] HTTPS enforced via Vercel
 
-# Option 2: Using psql
-psql "$POSTGRES_URL" -f supabase/migrations/001_profiles_table.sql
+### ✅ SEO & Social
+- [x] Meta tags (title, description)
+- [x] Open Graph tags for social sharing
+- [x] Twitter Card tags
+- [x] Favicon configured
+- [x] robots.txt present
 
-# Option 3: Using Supabase Dashboard SQL Editor
-# Navigate to https://supabase.com/dashboard/project/spdtwktxdalcfigzeqrz/editor
-# Copy contents from supabase/migrations/001_profiles_table.sql
-# Paste and run in SQL Editor
-```
+### ✅ Build Configuration
+- [x] TypeScript project references
+- [x] Strict type checking enabled
+- [x] ESLint configuration
+- [x] Vercel configuration file
+- [x] .vercelignore for build optimization
 
-### 4. Development
+### ✅ Monitoring & Analytics
+- [ ] Error tracking (Sentry/Vercel Analytics)
+- [ ] Performance monitoring
+- [ ] User analytics
+- [ ] Uptime monitoring
 
-```bash
-npm run dev
-```
+## 🛠️ Tech Stack
 
-App opens at `http://localhost:3000`
+- **Framework:** React 18.2 + TypeScript 5.2
+- **Build Tool:** Vite 5.0
+- **Database:** Supabase PostgreSQL
+- **Visualization:** Chart.js, Recharts, Plotly.js
+- **Maps:** Mapbox GL
+- **State Management:** Zustand
+- **Styling:** Tailwind CSS
+- **Deployment:** Vercel
 
-## 📁 Project Structure
+## 📊 Data Sources
 
-```
-scout-dashboard/
-├── src/
-│   ├── components/
-│   │   ├── Auth.tsx          # Authentication UI
-│   │   ├── Auth.css
-│   │   ├── Dashboard.tsx     # Main analytics dashboard
-│   │   └── Dashboard.css
-│   ├── lib/
-│   │   └── supabase.ts       # Supabase client
-│   ├── App.tsx               # Root component
-│   ├── App.css               # Global styles
-│   └── main.tsx              # Entry point
-├── supabase/
-│   └── migrations/
-│       └── 001_profiles_table.sql
-├── public/
-│   ├── favicon.ico
-│   └── OG.png                # Open Graph image
-├── index.html
-├── vite.config.ts
-├── tsconfig.json
-└── package.json
-```
-
-## 🗄️ Database Schema
-
-### `profiles` Table
-
-| Column       | Type      | Description                |
-|--------------|-----------|----------------------------|
-| id           | UUID      | User ID (FK to auth.users) |
-| email        | TEXT      | User email                 |
-| full_name    | TEXT      | User's full name           |
-| avatar_url   | TEXT      | Profile avatar URL         |
-| updated_at   | TIMESTAMP | Last update time           |
-| created_at   | TIMESTAMP | Profile creation time      |
-
-### RLS Policies
-
-- ✅ Users can view their own profile
-- ✅ Users can update their own profile
-- ✅ Profiles auto-created on signup
-
-## 🚀 Deployment
-
-### Vercel (Current)
-
-The app is deployed at: **https://scout-dashboard-xi.vercel.app**
-
-To deploy updates:
-
-```bash
-# Deploy to production
-vercel --prod
-
-# Or using Git (auto-deploy on push to main)
-git push origin main
-```
-
-### Environment Variables (Vercel)
-
-Set in Vercel Dashboard → Project Settings → Environment Variables:
-
-```
-VITE_SUPABASE_URL=https://spdtwktxdalcfigzeqrz.supabase.co
-VITE_SUPABASE_ANON_KEY=sb_publishable_p7jLR_yMD1wQJE8Go3-Nww_bnOzu-WX
-```
-
-## 🔧 Available Scripts
-
-```bash
-npm run dev      # Start development server (port 3000)
-npm run build    # Build for production
-npm run preview  # Preview production build
-npm run lint     # Run ESLint
-```
+The platform analyzes:
+- 21,154+ retail transactions from sari-sari stores
+- Campaign performance data
+- Consumer behavior metrics
+- Geographic sales patterns
 
 ## 🔐 Security
 
-- ✅ All API keys in environment variables
-- ✅ Row-Level Security (RLS) on all tables
-- ✅ Supabase Auth for authentication
-- ✅ No sensitive data in localStorage
-- ✅ HTTPS only in production
+Production security measures:
+- Content Security Policy headers
+- X-Frame-Options: DENY
+- X-Content-Type-Options: nosniff
+- XSS Protection enabled
+- Referrer-Policy configured
+- Permissions-Policy configured
 
-## 📊 Analytics Features (Roadmap)
+## 📖 Documentation
 
-- [ ] Transaction trend visualization
-- [ ] Consumer behavior insights
-- [ ] Market intelligence dashboard
-- [ ] Real-time data sync
-- [ ] Export reports (PDF, Excel)
-- [ ] Multi-tenant support
+- [Vercel Production Checklist](https://vercel.com/docs/production-checklist)
+- [Supabase Documentation](https://supabase.com/docs)
+- [Vite Documentation](https://vitejs.dev/)
 
-## 🤝 Support
+## 🌍 Deployment Regions
 
-- Supabase Project: `spdtwktxdalcfigzeqrz`
-- Deployment: https://scout-dashboard-xi.vercel.app
-- Docs: https://supabase.com/docs
+Primary region: Singapore (sin1)
 
-## 📄 License
+## 📝 License
 
-Proprietary - TBWA Internal Use Only
+Copyright © 2025 TBWA. All rights reserved.

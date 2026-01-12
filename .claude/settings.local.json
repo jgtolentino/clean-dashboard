@@ -30,7 +30,14 @@
       "Bash(vercel link:*)",
       "Bash(vercel:*)",
       "Bash(pkill:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(tree:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm ci:*)",
+      "Bash(lsof:*)",
+      "Bash(git remote add:*)"
     ]
   }
 }
