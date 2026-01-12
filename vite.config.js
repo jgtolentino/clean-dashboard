@@ -24,7 +24,7 @@ export default defineConfig({
                 manualChunks: {
                     'vendor-react': ['react', 'react-dom', 'react-router-dom'],
                     'vendor-charts': ['chart.js', 'recharts', 'react-chartjs-2'],
-                    'vendor-maps': ['mapbox-gl', 'react-map-gl'],
+                    'vendor-maps': ['mapbox-gl'],
                     'vendor-viz': ['plotly.js', 'react-plotly.js'],
                     'vendor-supabase': ['@supabase/supabase-js'],
                 },
