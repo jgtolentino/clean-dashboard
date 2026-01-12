@@ -1,16 +1,38 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense, lazy } from 'react'
 import Sidebar from './components/layout/Sidebar'
 import AIPanel from './components/layout/AIPanel'
 import { CascadingFilterPanel, CascadingFilterState } from './components/filters/CascadingFilterPanel'
-import { 
+
+// Eager load lightweight components (fast initial paint)
+import {
   EnhancedTransactionTrends,
   EnhancedProductMix,
   EnhancedConsumerBehavior,
   EnhancedConsumerProfiling,
-  EnhancedCompetitiveAnalysis,
-  EnhancedGeographicalIntelligence
+  EnhancedCompetitiveAnalysis
 } from './components/enhanced/EnhancedDashboard'
-import { DatabankPage } from './components/databank'
+
+// Lazy load heavy components (maps, large data views)
+const EnhancedGeographicalIntelligence = lazy(() =>
+  import('./components/enhanced/EnhancedDashboard').then(module => ({
+    default: module.EnhancedGeographicalIntelligence
+  }))
+)
+const DatabankPage = lazy(() =>
+  import('./components/databank').then(module => ({
+    default: module.DatabankPage
+  }))
+)
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center h-64 bg-white rounded-xl border border-gray-200">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-4" />
+      <p className="text-sm text-gray-500">Loading...</p>
+    </div>
+  </div>
+)
 
 function App() {
   const [activeSection, setActiveSection] = useState('transaction-trends')
@@ -80,46 +102,37 @@ function App() {
   }
 
   const renderActiveSection = () => {
-    // Check if this is the full databank page
+    // Lazy-loaded pages wrapped in Suspense
     if (activeSection === 'databank') {
-      return <DatabankPage />
+      return (
+        <Suspense fallback={<LoadingFallback />}>
+          <DatabankPage />
+        </Suspense>
+      )
     }
 
-    if (showEnhanced) {
-      switch (activeSection) {
-        case 'transaction-trends':
-          return <EnhancedTransactionTrends />
-        case 'product-mix':
-          return <EnhancedProductMix />
-        case 'consumer-behavior':
-          return <EnhancedConsumerBehavior />
-        case 'consumer-profiling':
-          return <EnhancedConsumerProfiling />
-        case 'competitive-analysis':
-          return <EnhancedCompetitiveAnalysis />
-        case 'geographical-intelligence':
-          return <EnhancedGeographicalIntelligence />
-        default:
-          return <EnhancedTransactionTrends />
-      }
-    } else {
-      // Fallback to basic components if needed
-      switch (activeSection) {
-        case 'transaction-trends':
-          return <EnhancedTransactionTrends />
-        case 'product-mix':
-          return <EnhancedProductMix />
-        case 'consumer-behavior':
-          return <EnhancedConsumerBehavior />
-        case 'consumer-profiling':
-          return <EnhancedConsumerProfiling />
-        case 'competitive-analysis':
-          return <EnhancedCompetitiveAnalysis />
-        case 'geographical-intelligence':
-          return <EnhancedGeographicalIntelligence />
-        default:
-          return <EnhancedTransactionTrends />
-      }
+    if (activeSection === 'geographical-intelligence') {
+      return (
+        <Suspense fallback={<LoadingFallback />}>
+          <EnhancedGeographicalIntelligence />
+        </Suspense>
+      )
+    }
+
+    // Eager-loaded components (no Suspense needed)
+    switch (activeSection) {
+      case 'transaction-trends':
+        return <EnhancedTransactionTrends />
+      case 'product-mix':
+        return <EnhancedProductMix />
+      case 'consumer-behavior':
+        return <EnhancedConsumerBehavior />
+      case 'consumer-profiling':
+        return <EnhancedConsumerProfiling />
+      case 'competitive-analysis':
+        return <EnhancedCompetitiveAnalysis />
+      default:
+        return <EnhancedTransactionTrends />
     }
   }
 
