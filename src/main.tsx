@@ -1,8 +1,11 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { FluentProvider } from '@fluentui/react-components'
+import { lightTheme } from '../lib/fluentui/theme'
 import App from './App.tsx'
 import './styles/index.css'
+import '../app/globals.css'
 
 // React Query client with optimized defaults for dashboard
 const queryClient = new QueryClient({
@@ -18,8 +21,10 @@ const queryClient = new QueryClient({
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <FluentProvider theme={lightTheme}>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </FluentProvider>
   </React.StrictMode>,
 )
