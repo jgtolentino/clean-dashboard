@@ -1,10 +1,16 @@
 import { createClient } from '@supabase/supabase-js'
 
-// These should be in environment variables in production
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://cxzllzyxwpyptfretryc.supabase.co'
+// Canonical Supabase project (shared with odoo-ce)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://spdtwktxdalcfigzeqrz.supabase.co'
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key'
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create client with session persistence disabled (read-only analytics)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false,
+  },
+})
 
 // Data fetching functions
 export const fetchSalesData = async (filters?: any) => {
